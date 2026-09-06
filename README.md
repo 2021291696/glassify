@@ -14,6 +14,10 @@
 
 或对 agent 说：**玻璃化 / glassify / 上玻璃 / 毛玻璃 / 磨砂**。适用于任何支持 SKILL.md 的 agent CLI（Claude Code / Codex / ZCode / Kimi 等）。
 
+## 在线演示
+
+**👉 [配方参考页（GitHub Pages 在线预览）](https://2021291696.github.io/glassify/)** —— 右上角切换亮色白玻璃 / 暗色高透玻璃双主题，含暗色铁律 ✅/❌ 对照样品、保持实色元素示例与玻璃化判定表。源码在 [`demo/index.html`](./demo/index.html)，全部内联零依赖，可直接抄走配方。
+
 ## 流程（两段式确认）
 
 1. **技术栈探测** — 手写 CSS / Tailwind / Flutter 三栈自动识别，存疑时让用户确认

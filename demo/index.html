@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>glassify · 玻璃拟态配方参考</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='1' width='14' height='14' rx='4' fill='%237c5cff'/%3E%3C/svg%3E">
+<meta name="description" content="glassify skill 配方活体参照：亮色白玻璃 / 暗色高透玻璃双主题，暗色铁律对照样例，全部内联无依赖。">
+<style>
+  /* ============================================================
+     glassify 配方参考页 —— 本页 CSS 即 SKILL.md 配方本体
+     · 亮色：白玻璃 + 暖纸底 + 黄蓝红光斑
+     · 暗色：高透烟熏玻璃（fill alpha ≤.35）+ 深夜底 + 紫青光晕
+     暗色铁律：alpha .12–.35 / blur ≥ 24 / 蚀刻边缘三件套 / 光泽折进 background
+     ============================================================ */
+  :root {
+    --paper-light: #faf7f0;
+    --paper-dark: #12121a;
+    --accent-blue: #0758f7;
+    --accent-purple: #7c5cff;
+    --accent-cyan: #3de0ff;
+  }
+  body[data-theme="light"] {
+    --text: #201d17;
+    --text-2: rgba(32, 29, 23, .62);
+    --text-3: rgba(32, 29, 23, .45);
+    color-scheme: light;
+  }
+  body[data-theme="dark"] {
+    --text: rgba(255, 255, 255, .92);
+    --text-2: rgba(255, 255, 255, .60);
+    --text-3: rgba(255, 255, 255, .38);
+    color-scheme: dark;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+
+  /* ---------- 背景光斑层（玻璃后面必须有东西可虚化） ---------- */
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    transition: opacity .45s ease;
+  }
+  .backdrop-light {
+    opacity: 1;
+    background:
+      radial-gradient(720px 480px at 10% -8%,
+        color-mix(in srgb, #ffe81a 78%, transparent), transparent 68%),
+      radial-gradient(820px 560px at 98% 14%,
+        color-mix(in srgb, #0758f7 26%, transparent), transparent 66%),
+      radial-gradient(900px 620px at 46% 112%,
+        color-mix(in srgb, #ffe81a 56%, transparent), transparent 70%),
+      radial-gradient(520px 420px at 82% 88%,
+        color-mix(in srgb, #ff3044 14%, transparent), transparent 72%),
+      var(--paper-light);
+  }
+  /* 暗色光斑必须又大又亮，否则高透玻璃后面是一片黑 */
+  .backdrop-dark {
+    opacity: 0;
+    background:
+      radial-gradient(840px 560px at 10% -8%,
+        color-mix(in srgb, var(--accent-purple) 60%, transparent), transparent 70%),
+      radial-gradient(940px 660px at 104% 10%,
+        color-mix(in srgb, var(--accent-cyan) 36%, transparent), transparent 68%),
+      radial-gradient(840px 620px at 78% 104%,
+        color-mix(in srgb, var(--accent-purple) 26%, transparent), transparent 70%),
+      radial-gradient(700px 560px at 90% 68%,
+        color-mix(in srgb, var(--accent-cyan) 16%, transparent), transparent 74%),
+      var(--paper-dark);
+  }
+  body[data-theme="dark"] .backdrop-light { opacity: 0; }
+  body[data-theme="dark"] .backdrop-dark  { opacity: 1; }
+
+  /* ---------- 玻璃顶栏 ---------- */
+  /* 亮色顶栏（白玻璃） */
+  .glass-bar {
+    backdrop-filter: blur(16px) saturate(1.5);
+    -webkit-backdrop-filter: blur(16px) saturate(1.5);
+    background: linear-gradient(160deg, rgba(255,255,255,.66), rgba(255,255,255,.38));
+    border: 1px solid rgba(255,255,255,.75);
+    border-bottom-color: rgba(17,17,17,.06);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.95),
+      0 6px 22px rgba(17,17,17,.08);
+  }
+  /* 暗色顶栏 = skill 配方 .glass-bar-dark（可比面板略实，仍必须能透光斑） */
+  body[data-theme="dark"] .glass-bar {
+    backdrop-filter: blur(24px) saturate(1.7);
+    -webkit-backdrop-filter: blur(24px) saturate(1.7);
+    background: linear-gradient(160deg, rgba(40,40,52,.55), rgba(16,16,22,.30));
+    border-color: rgba(255,255,255,.12);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.16),
+      0 6px 22px rgba(0,0,0,.40);
+  }
+  .topbar {
+    position: sticky;
+    top: 16px;
+    z-index: 10;
+    max-width: 1060px;
+    margin: 16px auto 0;
+    padding: 12px 20px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: .02em;
+  }
+  .brand-dot {
+    width: 12px; height: 12px;
+    border-radius: 4px;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    box-shadow: 0 0 12px color-mix(in srgb, var(--accent-purple) 55%, transparent);
+  }
+  .theme-btn {
+    border: 1px solid var(--text-3);
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 13px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+
+  main { max-width: 1060px; margin: 0 auto; padding: 44px 24px 64px; }
+
+  /* ---------- 玻璃卡核心配方 ---------- */
+  /* 亮色白玻璃（光泽折进 background，无 ::before） */
+  .glass-card {
+    position: relative;
+    border: 1px solid rgba(255,255,255,.75);
+    border-radius: 18px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.50), transparent 52%),
+      linear-gradient(165deg, rgba(255,255,255,.62) 0%, rgba(255,255,255,.34) 100%);
+    backdrop-filter: blur(16px) saturate(1.5);
+    -webkit-backdrop-filter: blur(16px) saturate(1.5);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.95),
+      inset 0 0 0 1px rgba(255,255,255,.28),
+      inset 0 -1px 0 rgba(17,17,17,.05),
+      0 2px 5px rgba(17,17,17,.07),
+      0 20px 44px -14px rgba(17,17,17,.28);
+    overflow: hidden;
+    transform: translateZ(0);
+    padding: 28px;
+    transition: background .45s ease, border-color .45s ease, box-shadow .45s ease;
+  }
+  /* 暗色高透玻璃 = skill 配方 .glass-card-dark（alpha 峰值 .32，蚀刻边缘三件套） */
+  body[data-theme="dark"] .glass-card {
+    border: 1px solid rgba(255,255,255,.16);
+    border-radius: 20px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03) 52%, transparent),
+      linear-gradient(160deg, rgba(255,255,255,.14), rgba(20,20,28,.20) 46%, rgba(12,12,18,.32));
+    backdrop-filter: blur(24px) saturate(1.8);
+    -webkit-backdrop-filter: blur(24px) saturate(1.8);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.30),
+      inset 0 -1px 0 rgba(0,0,0,.30),
+      inset 0 0 0 1px rgba(255,255,255,.04),
+      inset 0 -24px 44px -26px rgba(0,0,0,.55),
+      0 10px 26px rgba(0,0,0,.45),
+      0 30px 64px -24px rgba(0,0,0,.60);
+  }
+
+  .hero { padding: 40px 36px; margin-bottom: 24px; }
+  .hero h1 { font-size: 34px; line-height: 1.25; letter-spacing: .01em; }
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(120deg, var(--accent-blue), var(--accent-purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero p { margin-top: 14px; max-width: 620px; color: var(--text-2); line-height: 1.75; font-size: 15px; }
+  .hero .spec {
+    margin-top: 18px;
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 12.5px;
+    color: var(--text-3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+  .card h2 { font-size: 17px; margin-bottom: 10px; }
+  .card p { color: var(--text-2); font-size: 14px; line-height: 1.75; }
+  .card .tag {
+    display: inline-block;
+    margin-bottom: 14px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    color: var(--text-3);
+  }
+  .mono-list {
+    margin-top: 14px;
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 12px;
+    color: var(--text-3);
+    line-height: 2;
+  }
+
+  /* ---------- 暗色铁律对照（固定暗色舞台，不随主题切换） ---------- */
+  .law { margin-bottom: 24px; padding: 32px; }
+  .law h2 { font-size: 20px; margin-bottom: 6px; }
+  .law > p { color: var(--text-2); font-size: 14px; margin-bottom: 20px; line-height: 1.7; }
+  .law-stage {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    padding: 26px;
+    border-radius: 16px;
+    background:
+      radial-gradient(420px 300px at 18% 0%,
+        color-mix(in srgb, var(--accent-purple) 58%, transparent), transparent 70%),
+      radial-gradient(460px 320px at 92% 100%,
+        color-mix(in srgb, var(--accent-cyan) 34%, transparent), transparent 68%),
+      #12121a;
+  }
+  .law-swatch {
+    border-radius: 16px;
+    padding: 22px;
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: rgba(255,255,255,.92);
+  }
+  .law-swatch strong { display: block; margin-bottom: 8px; font-size: 14px; }
+  .law-swatch .mono {
+    display: block;
+    margin-top: 10px;
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: 11.5px;
+    color: rgba(255,255,255,.45);
+  }
+  /* ❌ 反面教材：fill alpha .85 = 实色块，光斑透不出来 */
+  .law-bad {
+    background: rgba(20, 20, 28, .85);
+    border: 1px solid rgba(255,255,255,.10);
+  }
+  /* ✅ 正确做法：alpha ≤.35 + blur 24 + 蚀刻边缘，光斑色相透出来 */
+  .law-good {
+    border: 1px solid rgba(255,255,255,.16);
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03) 52%, transparent),
+      linear-gradient(160deg, rgba(255,255,255,.14), rgba(20,20,28,.20) 46%, rgba(12,12,18,.32));
+    backdrop-filter: blur(24px) saturate(1.8);
+    -webkit-backdrop-filter: blur(24px) saturate(1.8);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.30),
+      inset 0 -1px 0 rgba(0,0,0,.30),
+      0 10px 26px rgba(0,0,0,.45);
+  }
+
+  /* ---------- 保持实色的元素（不上玻璃） ---------- */
+  .solids { margin-bottom: 24px; padding: 32px; }
+  .solids h2 { font-size: 20px; margin-bottom: 6px; }
+  .solids > p { color: var(--text-2); font-size: 14px; margin-bottom: 22px; line-height: 1.7; }
+  .solid-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+  }
+  .btn-solid {
+    border: none;
+    border-radius: 12px;
+    padding: 12px 26px;
+    font: inherit;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    color: #fff;
+    background: var(--accent-blue);
+    box-shadow: 0 6px 16px -6px rgba(7, 88, 247, .5);
+  }
+  body[data-theme="dark"] .btn-solid {
+    background: var(--accent-purple);
+    box-shadow: 0 6px 16px -6px rgba(124, 92, 255, .55);
+  }
+  .input-solid {
+    border-radius: 12px;
+    padding: 12px 16px;
+    font: inherit;
+    font-size: 14px;
+    width: 240px;
+    color: var(--text);
+    background: #fff;
+    border: 1px solid #d8d2c6;
+  }
+  body[data-theme="dark"] .input-solid {
+    background: #1c1c26;
+    border-color: rgba(255,255,255,.14);
+  }
+  .input-solid::placeholder { color: var(--text-3); }
+  .badge-solid {
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 12.5px;
+    font-weight: 600;
+    background: #f1ece0;
+    color: #57503f;
+    border: 1px solid #e2dbc9;
+  }
+  body[data-theme="dark"] .badge-solid {
+    background: #262633;
+    color: rgba(255,255,255,.75);
+    border-color: rgba(255,255,255,.12);
+  }
+
+  /* ---------- 判定表（玻璃卡承载，表体保持实色） ---------- */
+  .table-card h2 { font-size: 20px; margin-bottom: 6px; }
+  .table-card > p { color: var(--text-2); font-size: 14px; margin-bottom: 20px; line-height: 1.7; }
+  .verdict { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; }
+  .verdict th, .verdict td {
+    text-align: left;
+    padding: 11px 16px;
+    line-height: 1.6;
+  }
+  .verdict th {
+    font-size: 12.5px;
+    letter-spacing: .06em;
+    color: var(--text-3);
+    border-bottom: 1px solid var(--text-3);
+  }
+  .verdict tr td { background: #fff; border-bottom: 1px solid #eee8da; color: var(--text); }
+  body[data-theme="dark"] .verdict tr td {
+    background: #1a1a24;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+  }
+  .verdict tr:last-child td { border-bottom: none; }
+  .verdict td:first-child { border-radius: 10px 0 0 10px; }
+  .verdict td:last-child { border-radius: 0 10px 10px 0; }
+  .yes { color: #0a8f4c; font-weight: 700; }
+  body[data-theme="dark"] .yes { color: #3ddc97; }
+  .no { color: #c23a2b; font-weight: 700; }
+  body[data-theme="dark"] .no { color: #ff8a7a; }
+  .verdict td small { color: var(--text-3); }
+
+  footer {
+    margin-top: 36px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-3);
+    line-height: 2;
+  }
+  footer a { color: var(--text-2); }
+</style>
+</head>
+<body data-theme="light">
+
+  <div class="backdrop backdrop-light"></div>
+  <div class="backdrop backdrop-dark"></div>
+
+  <header class="glass-bar topbar">
+    <div class="brand"><span class="brand-dot"></span>glassify<span style="font-weight:400;font-size:13px;color:var(--text-3)">配方参考</span></div>
+    <button class="theme-btn" id="themeBtn" type="button">🌙 暗色</button>
+  </header>
+
+  <main>
+    <section class="glass-card hero">
+      <h1>玻璃拟态<em>配方</em>参考页</h1>
+      <p>本页即 glassify SKILL.md 配方的活体参照：右上角切换<strong>亮色白玻璃</strong>与<strong>暗色高透玻璃</strong>两套主题，全部样式内联、零依赖，源码可直接抄走。暗色配方遵守铁律——fill alpha <code>.12–.35</code>、blur ≥ 24px、蚀刻边缘三件套、光泽折进 background。</p>
+      <div class="spec">
+        <span>亮色卡 blur(16px) saturate(1.5)</span>
+        <span>暗色卡 blur(24px) saturate(1.8)</span>
+        <span>暗色 fill 峰值 alpha .32</span>
+        <span>−webkit-backdrop-filter 必带</span>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="glass-card card">
+        <span class="tag">主卡片 / 面板 ✅</span>
+        <h2>玻璃感最集中的载体</h2>
+        <p>大容器上玻璃，透出背景光斑的色相与流动。注意本页背景：亮色黄蓝红光斑、暗色紫青光晕——玻璃后面必须有东西可虚化，否则看起来只是半透明色块。</p>
+        <div class="mono-list">border white .75 → .16<br>inset 高光 + 暗边 + 双层外投影</div>
+      </article>
+
+      <article class="glass-card card">
+        <span class="tag">弹窗 / 顶栏 / 抽屉 ✅</span>
+        <h2>悬浮层天然契合玻璃</h2>
+        <p>顶部导航即本页顶栏配方：暗色下可比面板略实（alpha .30–.55），但必须仍能透光斑。弹窗、侧边栏、Toast 同理，浮层 + 透光 = 层次清晰。</p>
+        <div class="mono-list">顶栏 blur(24px) saturate(1.7)<br>border-bottom white .12</div>
+      </article>
+
+      <article class="glass-card card">
+        <span class="tag">可读性红线 ⚠️</span>
+        <h2>玻璃不得吃掉对比度</h2>
+        <p>光泽已折进 background，不用 ::before 叠在文字上。正文对比度保持 WCAG AA；玻璃卡堆叠时透光正常，不出现全白全黑。按钮、输入框、标签、表格行一律保持实色，见下方样例。</p>
+        <div class="mono-list">文字色随明暗流派切换<br>44px 触摸目标不被装饰破坏</div>
+      </article>
+    </section>
+
+    <section class="glass-card law">
+      <h2>暗色铁律：高透 ✅ vs 实色块 ❌</h2>
+      <p>暗色玻璃最容易做成「糊一层深色块」。下面两块样品底下是同样的紫青光斑——左边 alpha .85 直接把光斑捂死，右边 alpha ≤.35 + blur 24 让色相透出来。配方失败 = 重做，不要交付。</p>
+      <div class="law-stage">
+        <div class="law-swatch law-bad">
+          <strong>❌ fill alpha .85 —— 实色块</strong>
+          光斑完全透不出来，玻璃等于一层深灰油漆。这是最常见的翻车形态：面板永远不许 ≥ .60。
+          <span class="mono">background: rgba(20,20,28,.85) — 禁止</span>
+        </div>
+        <div class="law-swatch law-good">
+          <strong>✅ fill alpha ≤.35 + blur 24 —— 高透玻璃</strong>
+          紫青光斑的色相透过玻璃可见，蚀刻边缘提供厚度感。渐变里的中性暗色可换项目主色，只换色相，不把 alpha 加回去。
+          <span class="mono">blur(24px) saturate(1.8) · alpha 峰值 .32</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="glass-card solids">
+      <h2>保持实色的元素</h2>
+      <p>内容可读性与点击辨识度优先——这些元素不上玻璃：</p>
+      <div class="solid-row">
+        <button class="btn-solid" type="button">实色按钮</button>
+        <input class="input-solid" type="text" placeholder="实色输入框">
+        <span class="badge-solid">实色标签</span>
+      </div>
+    </section>
+
+    <section class="glass-card table-card">
+      <h2>玻璃化判定表（节选）</h2>
+      <p>大容器玻璃化、小交互元素保持实色，是两条成熟规律的合流：</p>
+      <table class="verdict">
+        <thead>
+          <tr><th>元素类型</th><th>玻璃化</th><th>理由</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>主卡片 / 面板</td><td class="yes">✅</td><td>玻璃感最集中体现</td></tr>
+          <tr><td>导航栏 / 底部栏</td><td class="yes">✅</td><td>半透明悬浮，视觉层次清晰</td></tr>
+          <tr><td>弹窗 / Modal</td><td class="yes">✅</td><td>浮层与玻璃质感天然契合</td></tr>
+          <tr><td>按钮</td><td class="no">❌</td><td>可点击辨识度</td></tr>
+          <tr><td>搜索框 / 输入框</td><td class="no">❌</td><td>内容可读性优先</td></tr>
+          <tr><td>表格 / 列表行</td><td class="no">❌</td><td>大量文字需要清晰对比度</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <footer>
+      glassify · MIT License ·
+      <a href="https://github.com/2021291696/glassify">GitHub 仓库</a> ·
+      <a href="https://github.com/2021291696/glassify/blob/master/SKILL.md">SKILL.md 配方全文</a><br>
+      暗色铁律：fill alpha .12–.35 · blur ≥ 24 · 光泽折进 background · 背景光斑必须又大又亮
+    </footer>
+  </main>
+
+<script>
+  (function () {
+    var btn = document.getElementById('themeBtn');
+    var saved = null;
+    try { saved = localStorage.getItem('glassify-theme'); } catch (e) {}
+    var initial = saved === 'dark' || saved === 'light'
+      ? saved
+      : (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+    function apply(theme) {
+      document.body.dataset.theme = theme;
+      btn.textContent = theme === 'dark' ? '☀️ 亮色' : '🌙 暗色';
+      try { localStorage.setItem('glassify-theme', theme); } catch (e) {}
+    }
+    apply(initial);
+    btn.addEventListener('click', function () {
+      apply(document.body.dataset.theme === 'dark' ? 'light' : 'dark');
+    });
+  })();
+</script>
+</body>
+</html>
