@@ -42,6 +42,12 @@
 - 手写 CSS 必须同时带 `-webkit-backdrop-filter`（Safari 至今要求前缀）
 - 按钮 / 输入框 / 标签 / 表格行保持实色，可读性优先
 
+## 实战案例：exam-prep 刷题模板
+
+exam-prep skill（备考刷题）的页面模板 quiz-template-v2 同样采用玻璃拟态：纽约日落摄影底 + 高透玻璃题卡（blur 12–24px，含 `-webkit-` 前缀），答题反馈的「逐步解析 / 知识点分支 / 解题模板」三层面板以玻璃分层呈现。下图为示例题库渲染实拍：
+
+![exam-prep 刷题模板实拍：日落摄影底上的玻璃题卡与答题反馈](docs/exam-prep-quiz.png)
+
 ## 安装
 
 实体 + junction / 复制均可，放进你的 agent skills 目录即可：
