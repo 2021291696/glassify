@@ -6,6 +6,12 @@
 
 > **玻璃化改造师。** 把已有前端项目（手写 CSS / Tailwind / Flutter）改造为玻璃拟态（glassmorphism）风格——先问颜色，出方案确认，动手改造，视口截图验收。
 
+| 亮色白玻璃 | 暗色高透玻璃 |
+|:---:|:---:|
+| ![亮色白玻璃预览](docs/preview-light.png) | ![暗色高透玻璃预览](docs/preview-dark.png) |
+
+*↑ 配方活体参照页实拍，右上角一键切换主题——[在线交互预览](https://2021291696.github.io/glassify/)*
+
 ## 触发
 
 ```
