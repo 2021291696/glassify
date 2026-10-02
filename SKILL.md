@@ -1,11 +1,11 @@
 ---
 name: glassify
-description: 将已有前端项目（手写 CSS / Tailwind / Flutter）改造为玻璃质感 glassmorphism 风格（毛玻璃/磨砂效果）。触发词：玻璃化、glassify、上玻璃、毛玻璃、磨砂。流程：先问颜色→出方案确认→动手改→视口截图验收。暗色玻璃 fill 必须高透（alpha .12–.35），禁止实色块。
+description: Glassify existing frontend projects (vanilla CSS / Tailwind / Flutter) into glassmorphism — 将已有前端项目改造为玻璃拟态 glassmorphism 风格（毛玻璃/磨砂/frosted glass 效果）。Triggers: glassify, glassmorphism, frosted glass, glass UI, glass effect, liquid glass, 玻璃化, 玻璃拟态, 上玻璃, 毛玻璃, 磨砂。边界：只改造已有项目，不做从零新建。流程：出方案一次确认（未指定颜色则附两套候选色板）→动手改→视口截图验收（无截图能力时降级静态自检）。交互语言跟随用户。暗色面板 fill alpha .12–.35（顶栏可放宽至 .55），禁止实色块。
 ---
 
 # 玻璃化改造 — glassify
 
-将现有前端项目中的主容器（卡片、面板、导航栏、弹窗等）改造为玻璃质感（glassmorphism）风格。每次调用时先问颜色，出方案确认后动手，改完截图验证。
+将现有前端项目中的主容器（卡片、面板、导航栏、弹窗等）改造为玻璃质感（glassmorphism）风格。每次调用时直接出方案（未指定颜色则附两套候选色板），一次确认后动手，改完截图验证。
 
 ## 触发
 
@@ -14,7 +14,7 @@ description: 将已有前端项目（手写 CSS / Tailwind / Flutter）改造为
 ```
 
 - 项目路径：必填，绝对路径或当前工作目录下的相对路径
-- 颜色说明：可选，跳过颜色提问直接指定色板描述（如"深邃蓝紫风"、"暖陶土色"）
+- 颜色说明：可选，直接指定色板描述（如"深邃蓝紫风"、"暖陶土色"）；未指定时方案会附两套候选色板，无需单独提问
 
 ## 流程
 
@@ -31,24 +31,26 @@ description: 将已有前端项目（手写 CSS / Tailwind / Flutter）改造为
 
 如探测失败或存疑，输出猜测结果让用户确认。
 
-### 阶段 2：颜色提问
+### 阶段 2：产出方案，一次确认
 
-**当用户没有在触发词中给出颜色说明时**，询问：
+`git status` 先行：检查项目工作区是否干净，结果写进方案卡片的「工作区检测」行。
 
-> 你想用哪种颜色风格？
-> 1. **destiny 暖纸系** — 暖白底+黄蓝红彩色光斑，亮色调玻璃
-> 2. **soshow 赛博暗** — 深夜蓝底+紫青霓虹光晕，暗色调玻璃
+**用户在触发词中给了颜色说明** → 直接按该色板出方案。
+
+**未给颜色** → 不要单独发问，出方案时附上候选色板，让用户一次回复「1 / 2 / 自定义色板描述」：
+
+> 选一个颜色方案即可开工：
+> 1. **暖纸 Warm Paper** — 暖白底+黄蓝红彩色光斑，亮色调玻璃
+> 2. **暗夜霓虹 Dark Neon** — 深夜蓝底+紫青霓虹光晕，暗色调玻璃
 > 3. **跟随目标项目现有主色** — 提取项目样式中的主色和辅色，衍生光斑
 > 4. **自定义** — 描述你想要的色板（如"薄荷绿+天蓝，清新冷调"）
 
-根据用户选择，确定：
+选定色板后，确定：
 - 玻璃面底色明暗（亮色/暗色）
 - 光斑颜色（1~4 个径向渐变）
 - 文字色（浅色背景用深色、深色背景用浅色）
 
-### 阶段 3：产出方案，等待确认
-
-向用户展示：
+向用户展示（以下输出均以用户当前语言）：
 
 ```
 📋 玻璃化方案
@@ -61,15 +63,16 @@ description: 将已有前端项目（手写 CSS / Tailwind / Flutter）改造为
   2. src/styles.css → .birth-form, .site-header → 加玻璃配方
   3. src/styles.css → 背景补光斑（当前为纯色平底）
 维持实色：按钮、输入框、标签
+⚠️ 工作区检测：2 个未提交文件——请先提交/stash，或确认改用逐文件回滚
 ────────────────
-确认开始改造？(y/n)
+回复 y 开始改造（未选色板时附「1 / 2 / 自定义色板」一并回复）
 ```
 
 **用户确认前，不写任何文件。**
 
-### 阶段 4：执行改造
+### 阶段 3：执行改造
 
-**动手前硬闸口：`git status` 确认项目工作区干净。** 若有未提交改动，先请用户提交或 stash——否则本次改造的回滚会连带吞掉无关改动。闸口未过，不写任何文件。
+**动手前硬闸口：工作区干净。** `git status` 已在阶段 2 出方案时检查并写入方案卡片，动手前复核一次仍然干净。若有未提交改动且用户未处理，本次改造的回滚会连带吞掉无关改动——只允许逐文件回滚模式。闸口未过，不写任何文件。
 
 按技术栈执行对应配方。
 
@@ -77,7 +80,7 @@ description: 将已有前端项目（手写 CSS / Tailwind / Flutter）改造为
 
 暗色玻璃最容易做成「糊一层深色块」。下列任一违反 = 配方失败，重做，不要交付：
 
-- **fill alpha `.12–.35`**，面板永远不许 ≥ `.60`（那是实色，不是玻璃）
+- **fill alpha `.12–.35`**；`.36` 起即超标需收紧，`≥ .60` 是实色块直接判失败
 - **blur ≥ 24px + saturate ≥ 1.6**
 - **蚀刻边缘必齐**：内嵌高光 + 内嵌暗边 + 双层外投影。缺一项就没有厚度
 - **光泽折进 `background`**，禁止 `::before` 叠在文字上（会洗对比度）
@@ -85,6 +88,8 @@ description: 将已有前端项目（手写 CSS / Tailwind / Flutter）改造为
 - 顶栏可比面板略实（alpha `.30–.55`），面板保持高透
 
 颜色跟项目走；以上是结构，不是色值。
+
+亮色配方基线同检：blur ≥ 16px + saturate ≥ 1.5 + 蚀刻三件套（见上方 `.glass-card` 样例），缺一项同样重做。
 
 #### 三套共用配方核心
 
@@ -203,7 +208,7 @@ Tailwind 的 `backdrop-blur` 只有预设档位，需要精确值时在 `tailwin
 }
 ```
 
-`@theme` 是 Tailwind v4 语法；v3 项目改在 `tailwind.config` 的 `theme.extend.backdropBlur` 里加同名档位，否则档位静默无效。
+`@theme` 是 Tailwind v4 语法；v3 项目改在 `tailwind.config` 的 `theme.extend.backdropBlur` 里加同名档位，否则档位静默无效。同理，v3 下 `border-white/16` 须写作 `border-white/[.16]`、`saturate-180` 须写作 `saturate-[1.8]`（v3 透明度步进为 5、saturate 只有 0/50/100/150/200），否则静默无效。
 
 玻璃化时用这些工具类组合：
 
@@ -218,7 +223,7 @@ Tailwind 的 `backdrop-blur` 只有预设档位，需要精确值时在 `tailwin
 **背景光斑**：加在布局外壳层，用 `bg-[radial-gradient(...)]`。暗色项目套用上面 `.app-backdrop-dark` 的多层径向，不要只铺纯色。
 
 ```jsx
-<div className="bg-[radial-gradient(720px_480px_at_10%_-8%,color-mix(in_srgb,var(--wash)_78%,transparent)_0%,transparent_68%),radial-gradient(820px_560px_at_98%_14%,color-mix(in_srgb,var(--accent)_26%,transparent)_0%,transparent_66%),var(--paper)]">
+<div className="bg-[radial-gradient(720px_480px_at_10%_-8%,color-mix(in_srgb,var(--accent,#ffe81a)_78%,transparent)_0%,transparent_68%),radial-gradient(820px_560px_at_98%_14%,color-mix(in_srgb,var(--accent)_26%,transparent)_0%,transparent_66%),var(--paper)]">
 ```
 
 #### Flutter 项目改造
@@ -254,6 +259,7 @@ Container(
 );
 
 // 暗色玻璃卡 —— surface alpha 用 0.22，禁止 0.85（实色块）
+// final cs = Theme.of(context).colorScheme;
 // 背后必须有亮光斑/图片，否则 BackdropFilter 虚化空气
 Container(
   decoration: BoxDecoration(
@@ -266,6 +272,11 @@ Container(
         color: Colors.black.withValues(alpha: 0.45),
         blurRadius: 26,
         offset: const Offset(0, 10),
+      ),
+      BoxShadow(
+        color: Colors.black.withValues(alpha: 0.60),
+        blurRadius: 64,
+        offset: const Offset(0, 30),
       ),
     ],
   ),
@@ -294,9 +305,11 @@ Container(
 **Flutter 补充约束：**
 
 - `withValues(alpha:)` 需要 Flutter ≥ 3.27；更旧的项目改用 `withOpacity()`（已废弃但可编译），全文件保持同一套 API，不要混用
+- Flutter 无 inset 阴影：蚀刻三件套（内嵌高光/暗边/内嵌环）仅约束 Web 栈；Flutter 用双层外投影 + 顶部高光渐变近似「厚度」，即视为达标（见上方暗色示例的两枚 `BoxShadow`）
+- Web 侧 `saturate ≥ 1.6` 在 Flutter 无对应 API：可用 `ImageFilter.compose(outer: ColorFilter.matrix(饱和度矩阵), inner: ImageFilter.blur(...))` 近似，或接受 Flutter 版仅 blur 并向用户说明
 - `BackdropFilter` 底层走 saveLayer，开销大：**长列表不要给每个 item 套玻璃**（滚动掉帧），列表项用实色半透明近似，玻璃只给悬浮卡片/顶栏/弹窗
 
-### 阶段 5：验证
+### 阶段 4：验证
 
 **Web 项目**：用 Playwright 打开 `localhost` 截图。没有 dev server 的静态页面，先在项目目录起 `python -m http.server` 再访问（Playwright MCP 拒绝 `file://` 协议，直接打开会报错）。
 
@@ -304,19 +317,21 @@ Container(
 
 **Flutter 项目**：执行 `flutter analyze` 检查编译，尝试 `flutter run` 截图。
 
+**降级路径（agent 无浏览器/视口截图能力，或 Flutter 无设备/模拟器时）**：改做代码级静态自检——校验暗色面板 alpha 落在 `.12–.35`（顶栏 ≤ `.55`）、blur ≥ 24px、saturate ≥ 1.6、蚀刻三件套与双层外投影层数齐全、`-webkit-backdrop-filter` 前缀在位；渲染类检查项（光斑肉眼可见、透光正常、堆叠透光、光泽不盖文字）转成自查清单交用户，交付消息必须标注「未经视口验证」。Flutter 侧 `flutter analyze` 通过即交付，标注「未做截图验收」。
+
 检查清单：
 - 玻璃卡片背后有可模糊的内容（光斑/图片/渐变）；暗色底光斑肉眼可见，不是淡得像没加
 - 暗色面板透过玻璃能看到光斑色相；若只看到实色块 → alpha 超标，重做
-- 玻璃卡片相互堆叠时透光正常（不出现全白全黑）
-- 文字对比度不因玻璃背景降低（WCAG AA 水准）——光泽不得盖住文字
+- 玻璃卡片相互堆叠时透光正常（叠加处 alpha 峰值不得 >.60 或 <.05，即不出现近纯白/近纯黑）
+- 文字对比度不因玻璃背景降低——用玻璃下方最深/最浅背景色分别计算对比度，取最差值 ≥ 4.5:1（正文）/ 3:1（大字）——光泽不得盖住文字
 - 按钮、输入框、标签没有误玻璃化
 - 44px 触摸目标未被装饰破坏
 - 兼容 `prefers-reduced-motion`（玻璃效果本身不涉及动画，不动）
 - Web 截图是视口模式，不是 fullPage
 
-### 阶段 6：回滚（如有需要）
+### 阶段 5：回滚（如有需要）
 
-回滚只针对本次玻璃化的改动，前提是阶段 4 硬闸口已确认工作区干净：
+回滚只针对本次玻璃化的改动，前提是动手前硬闸口已确认工作区干净：
 
 - 工作区当时干净 → 可整体恢复：`git checkout -- .`
 - 当时留有无关未提交改动 → 只能逐文件恢复：`git checkout -- <本次改动的文件列表>`
@@ -352,9 +367,9 @@ Container(
 
 | 用户选色 | 明暗流派 |
 |---------|---------|
-| destiny 暖纸系 | 亮色白玻璃 |
+| 暖纸 Warm Paper | 亮色白玻璃 |
 | 自定义浅色系 | 亮色白玻璃 |
-| soshow 暗系 | 暗色烟熏玻璃 |
+| 暗夜霓虹 Dark Neon | 暗色烟熏玻璃 |
 | 自定义深色系 | 暗色烟熏玻璃 |
 | 跟随项目主色 | 提取页面底色明暗判断 |
 
